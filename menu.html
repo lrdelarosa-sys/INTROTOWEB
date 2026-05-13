@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coffee Shop</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: radial-gradient(circle at top, #1a1a1a, #0b0b0b);
+  color: #fff;
+}
+
+/* HEADER */
+header {
+  text-align: center;
+  padding: 28px;
+  font-size: 2.2rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+/* MENU GRID */
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 22px;
+  padding: 25px;
+}
+
+/* CARD AESTHETIC */
+.card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: 18px;
+  backdrop-filter: blur(12px);
+  transition: 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(255,255,255,0.2);
+}
+
+.card h2 {
+  margin-top: 0;
+  font-size: 1.2rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 10px;
+}
+
+/* SELECT STYLE */
+select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  border-radius: 10px;
+  border: none;
+  background: #1e1e1e;
+  color: #fff;
+}
+
+/* BUTTONS */
+button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ffffff, #d6d6d6);
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  transform: scale(1.03);
+  background: #fff;
+}
+
+/* CART PANEL */
+.cart {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 280px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(15px);
+  border-radius: 16px;
+  padding: 15px;
+}
+
+.cart h3 {
+  margin-top: 0;
+}
+
+.cart-item {
+  font-size: 13px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.small {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+/* RECEIPT */
+#receipt {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.75);
+  justify-content: center;
+  align-items: center;
+}
+
+.receipt-box {
+  background: #fff;
+  color: #000;
+  padding: 20px;
+  border-radius: 14px;
+  width: 320px;
+  animation: pop 0.25s ease;
+}
+
+@keyframes pop {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.receipt-box h2 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.receipt-box p {
+  font-size: 14px;
+  margin: 5px 0;
+}
+
+.close-btn {
+  background: #000;
+  color: #fff;
+}
+#receipt {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.75);
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(6px);
+}
+
+/* Receipt Box */
+.receipt-box {
+  background: linear-gradient(145deg, #ffffff, #f3f3f3);
+  color: #111;
+  padding: 22px;
+  border-radius: 18px;
+  width: 340px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+  animation: popIn 0.25s ease;
+  font-family: 'Segoe UI', sans-serif;
+  position: relative;
+}
+
+/* Animation */
+@keyframes popIn {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Title */
+.receipt-box h2 {
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 1.4rem;
+  letter-spacing: 1px;
+}
+
+/* Items */
+#receiptDetails {
+  font-size: 14px;
+  line-height: 1.6;
+  max-height: 250px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+/* Scrollbar styling */
+#receiptDetails::-webkit-scrollbar {
+  width: 5px;
+}
+
+#receiptDetails::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+/* Divider */
+.receipt-box hr {
+  border: none;
+  border-top: 1px dashed #bbb;
+  margin: 12px 0;
+}
+
+/* Total */
+.receipt-box p {
+  font-size: 16px;
+  text-align: right;
+  margin: 10px 0 0;
+}
+
+/* Close Button */
+.close-btn {
+  width: 100%;
+  margin-top: 15px;
+  padding: 10px;
+  border: none;
+  border-radius: 12px;
+  background: #111;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.close-btn:hover {
+  background: #333;
+  transform: scale(1.02);
+}
+
+/* Optional receipt feel (dotted paper vibe) */
+.receipt-box::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  border: 1px dashed rgba(0,0,0,0.15);
+  border-radius: 14px;
+  pointer-events: none;
+}
+#receipt {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.85);
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(8px);
+}
+
+/* MAIN CARD */
+.receipt-box {
+  width: 360px;
+  background: #121212;
+  color: #fff;
+  border-radius: 16px;
+  padding: 22px;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  font-family: 'Segoe UI', sans-serif;
+  animation: pop 0.25s ease;
+}
+
+/* HEADER */
+.receipt-header {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.receipt-header h2 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.receipt-header p {
+  margin: 5px 0;
+  font-size: 13px;
+  color: #aaa;
+}
+
+#receiptDate {
+  font-size: 11px;
+  color: #777;
+}
+
+/* DIVIDER */
+hr {
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  margin: 12px 0;
+}
+
+/* ITEMS */
+#receiptDetails {
+  font-size: 13px;
+  line-height: 1.8;
+  max-height: 220px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.receipt-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px dashed rgba(255,255,255,0.08);
+}
+
+/* TOTAL */
+.receipt-total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  padding-top: 10px;
+}
+
+/* BUTTON */
+.close-btn {
+  width: 100%;
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 12px;
+  border: none;
+  background: #ffffff;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.close-btn:hover {
+  transform: scale(1.02);
+  background: #ddd;
+}
+
+/* ANIMATION */
+@keyframes pop {
+  from { transform: scale(0.85); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+/* CART */
+.cart {
+  position: fixed;
+  right: -320px; /* hidden */
+  bottom: 20px;
+  width: 280px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(15px);
+  border-radius: 16px;
+  padding: 15px;
+  transition: 0.3s ease;
+}
+
+/* SHOW CART */
+.cart.show {
+  right: 20px;
+}
+
+/* OPEN BUTTON */
+.open-cart-btn {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: auto;
+  padding: 12px 18px;
+  border-radius: 12px;
+}
+
+/* CLOSE BUTTON */
+.close-cart-btn {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  float: right;
+  background: red;
+  color: white;
+  margin-top: -5px;
+}
+/* POPUP NOTIFICATION */
+.popup {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #ffffff;
+  color: #000;
+  padding: 14px 20px;
+  border-radius: 14px;
+  font-weight: bold;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  transform: translateY(-30px);
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.3s ease;
+  z-index: 9999;
+}
+
+/* SHOW ANIMATION */
+.popup.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+</style>
+</head>
+
+<body>
+
+<header>Coffee Shop</header>
+
+<div class="container">
+
+  <!-- ESPRESSO -->
+  <div class="card">
+    <h2>Espresso Based</h2>
+
+    <select id="espresso">
+      <option value="Espresso|90">Espresso - ₱90</option>
+      <option value="Americano|110">Americano - ₱110</option>
+      <option value="Ristretto|100">Ristretto - ₱100</option>
+    </select>
+
+    <select id="espressoQty">
+      <option value="1">1x</option>
+      <option value="2">2x</option>
+      <option value="3">3x</option>
+      <option value="5">5x</option>
+    </select>
+
+    <button onclick="addOrder('espresso')">Add Order</button>
+  </div>
+
+<!-- Hot -->
+<div class="card">
+  <h2>Hot Based</h2>
+
+  <select id="hot">
+    <option value="Hot Latte|90">Hot Latte - ₱130</option>
+    <option value="Americano|110">Americano - ₱110</option>
+    <option value="Spanish Latte|150">Spanish Latte - ₱150</option>
+    <option value="Caramel Macchiato|160">Caramel Macchiato - ₱160</option>
+    <option value="Cappuccino|130">Cappuccino - ₱130</option>
+    <option value="Hot Choco|120">Hot Choco - ₱120</option>
+  </select>
+
+  <select id="hotQty">
+    <option value="1">1x</option>
+    <option value="2">2x</option>
+    <option value="3">3x</option>
+    <option value="5">5x</option>
+  </select>
+
+  <button onclick="addOrder('hot')">Add Order</button>
+</div>
+
+  <!-- MILK -->
+  <div class="card">
+    <h2>Milk Based</h2>
+
+    <select id="milk">
+      <option value="Cold Latte|140">Cold Latte - ₱140</option>
+      <option value="Cappuccino|130">Cappuccino - ₱130</option>
+      <option value="Flat White|145">Flat White - ₱145</option>
+    </select>
+
+    <select id="milkQty">
+      <option value="1">1x</option>
+      <option value="2">2x</option>
+      <option value="3">3x</option>
+      <option value="5">5x</option>
+    </select>
+
+    <button onclick="addOrder('milk')">Add Order</button>
+  </div>
+
+  <!-- SIGNATURE -->
+  <div class="card">
+    <h2>Signature Drinks</h2>
+
+    <select id="signature">
+      <option value="Caramel Macchiato|150">Caramel Macchiato - ₱150</option>
+      <option value="Spanish Latte|160">Spanish Latte - ₱160</option>
+      <option value="Mocha|150">Mocha - ₱150</option>
+    </select>
+
+    <select id="signatureQty">
+      <option value="1">1x</option>
+      <option value="2">2x</option>
+      <option value="3">3x</option>
+      <option value="5">5x</option>
+    </select>
+
+    <button onclick="addOrder('signature')">Add Order</button>
+  </div>
+
+  <!-- COLD -->
+  <div class="card">
+    <h2>Cold Drinks</h2>
+
+    <select id="cold">
+      <option value="Iced Latte|140">Iced Latte - ₱140</option>
+      <option value="Cold Brew|150">Cold Brew - ₱150</option>
+      <option value="Iced Mocha|150">Iced Mocha - ₱150</option>
+    </select>
+
+    <select id="coldQty">
+      <option value="1">1x</option>
+      <option value="2">2x</option>
+      <option value="3">3x</option>
+      <option value="5">5x</option>
+    </select>
+
+    <button onclick="addOrder('cold')">Add Order</button>
+  </div>
+
+</div>
+
+<!-- OPEN CART BUTTON -->
+<button class="open-cart-btn" onclick="openCart()">
+  🛒 Open Cart
+</button>
+<!-- POPUP -->
+<div id="popup" class="popup">
+  ✅ Added to cart
+</div>
+<!-- CART -->
+<div class="cart" id="cartBox">
+
+  <!-- CLOSE BUTTON -->
+  <button class="close-cart-btn" onclick="closeCart()">✖</button>
+
+  <h3>🛒 Your Order</h3>
+
+  <div id="cartItems"></div>
+
+  <p class="small">
+    Total Items: <span id="totalItems">0</span>
+  </p>
+
+  <p>
+    <b>Total: ₱<span id="totalPrice">0</span></b>
+  </p>
+
+  <button onclick="checkout()">Checkout</button>
+</div>
+
+<!-- RECEIPT -->
+<div id="receipt">
+  <div class="receipt-box">
+
+<!-- HEADER -->
+<div class="receipt-header">
+  <h2>Coffee Shop</h2>
+  <p style="text-align: center;">Thanks for your order</p> 
+  <span id="receiptDate"></span>
+</div>
+
+    <hr>
+
+    <!-- ITEMS -->
+    <div id="receiptDetails"></div>
+
+    <hr>
+
+    <!-- TOTAL -->
+    <div class="receipt-total">
+      <div>
+        <span>Total</span>
+        <b>₱<span id="receiptTotal"></span></b>
+      </div>
+    </div>
+
+    <button class="close-btn" onclick="closeReceipt()">Close Receipt</button>
+
+  </div>
+</div>
+
+<script>
+let cart = [];
+
+function addOrder(category) {
+  let itemSelect = document.getElementById(category).value;
+  let qty = parseInt(document.getElementById(category + "Qty").value);
+
+  let [name, price] = itemSelect.split("|");
+  price = parseInt(price);
+
+  let existing = cart.find(item => item.name === name);
+  showPopup(`${name} added to cart`);
+
+  if (existing) {
+    existing.qty += qty;
+  } else {
+    cart.push({ name, price, qty });
+  }
+
+  updateCart();
+}
+
+/* =========================
+   🔥 EDITABLE CART SYSTEM
+========================= */
+
+function increaseItem(index) {
+  cart[index].qty += 1;
+  updateCart();
+}
+
+function decreaseItem(index) {
+  cart[index].qty -= 1;
+
+  if (cart[index].qty <= 0) {
+    cart.splice(index, 1); // remove if 0
+  }
+
+  updateCart();
+}
+
+function removeItem(index) {
+  cart.splice(index, 1);
+  updateCart();
+}
+
+function updateCart() {
+  let cartHTML = "";
+  let total = 0;
+  let totalItems = 0;
+
+  cart.forEach((item, index) => {
+    let itemTotal = item.price * item.qty;
+    total += itemTotal;
+    totalItems += item.qty;
+
+    cartHTML += `
+      <div class="cart-item" style="flex-direction: column; align-items: flex-start; gap: 5px;">
+        
+        <div style="display:flex; justify-content:space-between; width:100%;">
+          <span><b>${item.name}</b></span>
+          <span>₱${itemTotal}</span>
+        </div>
+
+        <div style="display:flex; gap:8px; align-items:center;">
+          <button onclick="decreaseItem(${index})">➖</button>
+          <span>${item.qty}x</span>
+          <button onclick="increaseItem(${index})">➕</button>
+          <button onclick="removeItem(${index})" style="background:red; color:white;">🗑</button>
+        </div>
+
+      </div>
+    `;
+  });
+
+  document.getElementById("cartItems").innerHTML = cartHTML;
+  document.getElementById("totalPrice").innerText = total;
+  document.getElementById("totalItems").innerText = totalItems;
+}
+
+/* =========================
+   🧾 RECEIPT
+========================= */
+
+function checkout() {
+  let receipt = "";
+  let total = 0;
+
+  cart.forEach(item => {
+    let itemTotal = item.price * item.qty;
+    total += itemTotal;
+
+    receipt += `
+      <div class="receipt-item">
+        <span>${item.name} x${item.qty}</span>
+        <span>₱${itemTotal}</span>
+      </div>
+    `;
+  });
+
+  document.getElementById("receiptDetails").innerHTML = receipt;
+  document.getElementById("receiptTotal").innerText = total;
+
+  // 🕒 Add date/time like real receipt
+  document.getElementById("receiptDate").innerText =
+    new Date().toLocaleString();
+
+  document.getElementById("receipt").style.display = "flex";
+
+  cart = [];
+  updateCart();
+}
+function closeReceipt() {
+  const receipt = document.getElementById("receipt");
+
+  receipt.style.display = "none";
+
+  // safety reset (prevents glitch/stuck state)
+  receipt.style.opacity = "0";
+  setTimeout(() => {
+    receipt.style.opacity = "1";
+  }, 100);
+}
+// OPEN CART
+function openCart() {
+  document.getElementById("cartBox").classList.add("show");
+}
+
+// CLOSE CART
+function closeCart() {
+  document.getElementById("cartBox").classList.remove("show");
+}
+function addOrder(category) {
+  let itemSelect = document.getElementById(category).value;
+  let qty = parseInt(document.getElementById(category + "Qty").value);
+
+  let [name, price] = itemSelect.split("|");
+  price = parseInt(price);
+
+  let existing = cart.find(item => item.name === name);
+
+  if (existing) {
+    existing.qty += qty;
+
+    // 🔥 show updated quantity instead of just added amount
+    showPopup(`${name} now: ${existing.qty}x`);
+  } else {
+    cart.push({ name, price, qty });
+
+    showPopup(`${qty}x ${name} added to cart`);
+  }
+
+  updateCart();
+}function addOrder(category) {
+  let itemSelect = document.getElementById(category).value;
+  let qty = parseInt(document.getElementById(category + "Qty").value);
+
+  let [name, price] = itemSelect.split("|");
+  price = parseInt(price);
+
+  let existing = cart.find(item => item.name === name);
+
+  if (existing) {
+    existing.qty += qty;
+
+    // 🔥 show updated quantity instead of just added amount
+    showPopup(`${name} now: ${existing.qty}x`);
+  } else {
+    cart.push({ name, price, qty });
+
+    showPopup(`${qty}x ${name} added to cart`);
+  }
+
+  updateCart();
+}
+function showPopup(message) {
+  const popup = document.getElementById("popup");
+
+  // Set message
+  popup.innerText = " " + message;
+
+  // Show popup
+  popup.classList.add("show");
+
+  // Auto hide after 2 seconds
+  setTimeout(() => {
+    popup.classList.remove("show");
+  }, 2000);
+}
+</script>
+
+</body>
+</html>
